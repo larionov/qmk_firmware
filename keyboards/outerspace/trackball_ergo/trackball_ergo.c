@@ -17,6 +17,7 @@
  */
 
 #include "trackball_ergo.h"
+// static pin_t direct_pins[MATRIX_ROWS][MATRIX_COLS] = DIRECT_PINS;
 
 #ifndef OPT_DEBOUNCE
 #    define OPT_DEBOUNCE 5 // (ms) 			Time between scroll events
@@ -131,54 +132,55 @@ report_mouse_t pointing_device_task_kb(report_mouse_t mouse_report) {
 }
 
 bool process_record_kb(uint16_t keycode, keyrecord_t* record) {
+    printf("\nr/c record %d. col: %d, row: %d. Type: %d, pressed: %d \n", keycode, record->event.key.col, record->event.key.row, record->event.type, record->event.pressed);
     // Update Timer to prevent accidental scrolls
-    if ((record->event.key.col == 1) && (record->event.key.row == 0)) {
-        last_mid_click    = timer_read();
-        is_scroll_clicked = record->event.pressed;
-    }
+    /* if ((record->event.key.col == 1) && (record->event.key.row == 0)) { */
+    /*     last_mid_click    = timer_read(); */
+    /*     is_scroll_clicked = record->event.pressed; */
+    /* } */
 
     if (!process_record_user(keycode, record)) {
         return false;
     }
 
-    if (keycode == DPI_CONFIG && record->event.pressed) {
-        keyboard_config.dpi_config = (keyboard_config.dpi_config + 1) % DPI_OPTION_SIZE;
-        eeconfig_update_kb(keyboard_config.raw);
-        pointing_device_set_cpi(dpi_array[keyboard_config.dpi_config]);
-    }
+    /* if (keycode == DPI_CONFIG && record->event.pressed) { */
+    /*     keyboard_config.dpi_config = (keyboard_config.dpi_config + 1) % DPI_OPTION_SIZE; */
+    /*     eeconfig_update_kb(keyboard_config.raw); */
+    /*     pointing_device_set_cpi(dpi_array[keyboard_config.dpi_config]); */
+    /* } */
 
-    if (keycode == DRAG_SCROLL) {
-#ifndef PLOOPY_DRAGSCROLL_MOMENTARY
-        if (record->event.pressed)
-#endif
-        {
-            is_drag_scroll ^= 1;
-        }
-#ifdef PLOOPY_DRAGSCROLL_FIXED
-        pointing_device_set_cpi(is_drag_scroll ? PLOOPY_DRAGSCROLL_DPI : dpi_array[keyboard_config.dpi_config]);
-#else
-        pointing_device_set_cpi(is_drag_scroll ? (dpi_array[keyboard_config.dpi_config] * PLOOPY_DRAGSCROLL_MULTIPLIER) : dpi_array[keyboard_config.dpi_config]);
-#endif
-    }
+    /*     if (keycode == DRAG_SCROLL) { */
+    /* #ifndef PLOOPY_DRAGSCROLL_MOMENTARY */
+    /*         if (record->event.pressed) */
+    /* #endif */
+    /*         { */
+    /*             is_drag_scroll ^= 1; */
+    /*         } */
+    /* #ifdef PLOOPY_DRAGSCROLL_FIXED */
+    /*         pointing_device_set_cpi(is_drag_scroll ? PLOOPY_DRAGSCROLL_DPI : dpi_array[keyboard_config.dpi_config]); */
+    /* #else */
+    /*         pointing_device_set_cpi(is_drag_scroll ? (dpi_array[keyboard_config.dpi_config] * PLOOPY_DRAGSCROLL_MULTIPLIER) : dpi_array[keyboard_config.dpi_config]); */
+    /* #endif */
+    /*     } */
 
-/* If Mousekeys is disabled, then use handle the mouse button
- * keycodes.  This makes things simpler, and allows usage of
- * the keycodes in a consistent manner.  But only do this if
- * Mousekeys is not enable, so it's not handled twice.
- */
-#ifndef MOUSEKEY_ENABLE
-    dprintf("\nr/c 0123456789ABCDEF %d \n", keycode);
-    if (IS_MOUSEKEY_BUTTON(keycode)) {
-        report_mouse_t currentReport = pointing_device_get_report();
-        if (record->event.pressed) {
-            currentReport.buttons |= 1 << (keycode - KC_MS_BTN1);
-        } else {
-            currentReport.buttons &= ~(1 << (keycode - KC_MS_BTN1));
-        }
-        pointing_device_set_report(currentReport);
-        pointing_device_send();
-    }
-#endif
+    /* If Mousekeys is disabled, then use handle the mouse button
+     * keycodes.  This makes things simpler, and allows usage of
+     * the keycodes in a consistent manner.  But only do this if
+     * Mousekeys is not enable, so it's not handled twice.
+     */
+    /* #ifndef MOUSEKEY_ENABLE */
+    /*     dprintf("\nr/c 0123456789ABCDEF %d \n", keycode); */
+    /*     if (IS_MOUSEKEY_BUTTON(keycode)) { */
+    /*         report_mouse_t currentReport = pointing_device_get_report(); */
+    /*         if (record->event.pressed) { */
+    /*             currentReport.buttons |= 1 << (keycode - KC_MS_BTN1); */
+    /*         } else { */
+    /*             currentReport.buttons &= ~(1 << (keycode - KC_MS_BTN1)); */
+    /*         } */
+    /*         pointing_device_set_report(currentReport); */
+    /*         pointing_device_send(); */
+    /*     } */
+    /* #endif */
 
     return true;
 }
@@ -197,19 +199,19 @@ void keyboard_pre_init_kb(void) {
      * pathways to ground. If you're messing with this, know this: driving ANY
      * of these pins high will cause a short. On the MCU. Ka-blooey.
      */
-#ifdef UNUSABLE_PINS
-    const pin_t unused_pins[] = UNUSABLE_PINS;
+    /* #ifdef UNUSABLE_PINS */
+    /*     const pin_t unused_pins[] = UNUSABLE_PINS; */
 
-    for (uint8_t i = 0; i < (sizeof(unused_pins) / sizeof(pin_t)); i++) {
-        setPinOutput(unused_pins[i]);
-        writePinLow(unused_pins[i]);
-    }
-#endif
+    /*     for (uint8_t i = 0; i < (sizeof(unused_pins) / sizeof(pin_t)); i++) { */
+    /*         setPinOutput(unused_pins[i]); */
+    /*         writePinLow(unused_pins[i]); */
+    /*     } */
+    /* #endif */
 
     // This is the debug LED.
 #if defined(DEBUG_LED_PIN)
-    /* setPinOutput(DEBUG_LED_PIN); */
-    /* writePin(DEBUG_LED_PIN, debug_enable); */
+    setPinOutput(DEBUG_LED_PIN);
+    writePin(DEBUG_LED_PIN, debug_enable);
 #endif
 
     keyboard_pre_init_user();
@@ -224,8 +226,25 @@ void eeconfig_init_kb(void) {
     eeconfig_update_kb(keyboard_config.raw);
     eeconfig_init_user();
 }
+static void init_pins(void) {
+    setPinInputHigh(GP21);
+    setPinInput(GP20);
+    setPinInput(GP23);
+}
 
 void matrix_init_kb(void) {
+    init_pins();
+
+    /* // initialize matrix state: all keys off */
+    /* for (uint8_t i = 0; i < MATRIX_ROWS; i++) { */
+    /*     raw_matrix[i] = 0; */
+    /*     matrix[i]     = 0; */
+    /* } */
+
+    //    debounce_init(MATRIX_ROWS);
+
+    //    matrix_init_kb();
+
     // is safe to just read DPI setting since matrix init
     // comes before pointing device init.
     keyboard_config.raw = eeconfig_read_kb();

@@ -15,7 +15,7 @@
     "features": {
         "bootmagic": true,
         "command": false,
-        "console": false,
+        "console": true,
         "extrakey": true,
         "mousekey": true,
         "nkro": true,
@@ -23,7 +23,9 @@
         "encoder": false
     },
     "matrix_pins": {
-        "direct": [[ "GP20", "GP21", "GP22"]]
+        "direct": [[
+	    "GP21", "GP20", "GP23"
+		   ]]
     }
     "layouts": {
         "LAYOUT": {

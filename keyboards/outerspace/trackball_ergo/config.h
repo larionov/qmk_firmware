@@ -19,33 +19,52 @@
 #pragma once
 
 /* disable action features */
-// #define NO_ACTION_LAYER
-// #define NO_ACTION_TAPPING
-// #define NO_ACTION_ONESHOT
+#define NO_ACTION_LAYER
+#define NO_ACTION_TAPPING
+#define NO_ACTION_ONESHOT
 
 // #define ROTATIONAL_TRANSFORM_ANGLE 0
 // #define POINTING_DEVICE_INVERT_Y
 
 // If board has a debug LED, you can enable it by defining this
-// #define DEBUG_LED_PIN F7
+#define DEBUG_LED_PIN GP17
 
 /* PMW3360 Settings */
-// #define UNUSABLE_PINS
-//    { GP1, GP2, GP3, GP4, GP5, GP6, GP7, GP8, GP9 }
+/* #define UNUSABLE_PINS \ */
+/*     { GP0, GP1, /\* GP2, GP3, GP4, GP5, *\/ GP6, GP7, GP8, GP9, GP12, GP13, GP14, GP15, GP16, GP10, GP11, GP18, /\* GP20, GP21, *\/ GP22, /\* GP23, *\/ GP24, GP26, GP27, GP28, GP29 } */
 
-#define POINTING_DEVICE_CS_PIN GP13
-// #define RP_SPI_USE_SPI1 1
-#define SPI_DRIVER SPID1
-/* spi config for eeprom and pmw3360 sensor */
-#define SPI_SCK_PIN GP10
-#define SPI_SCK_PAL_MODE 5
-#define SPI_MOSI_PIN GP11
-#define SPI_MOSI_PAL_MODE 5
-#define SPI_MISO_PIN GP12
-#define SPI_MISO_PAL_MODE 5
-// LCLICK D20
-// RCLICK D19
-// MCLICK D18
-// D15
-// D14
-// D16
+#undef DIRECT_PINS
+#define DIRECT_PINS          \
+    {                        \
+        { GP21, GP20, GP23 } \
+    }
+#define SPI_DRIVER SPID0
+#define SPI_SCK_PIN GP2
+#define SPI_MOSI_PIN GP3
+#define SPI_MISO_PIN GP0
+#define PMW33XX_CS_PIN GP5 // SPI CS pin.
+
+/* #define SPI_DRIVER SPID1 */
+/* #define SPI_SCK_PIN GP22 */
+/* #define SPI_MOSI_PIN GP23 */
+/* #define SPI_MISO_PIN GP20 */
+/* #define PMW33XX_CS_PIN GP21 // SPI CS pin. */
+
+/* Optional. */
+#define PMW33XX_CPI 1000      // The CPI range is 100-12000, in increments of 100. Defaults to 1600 CPI.
+#define MOUSE_EXTENDED_REPORT // Use -32767 to 32767, instead of just -127 to 127.
+// #define POINTING_DEVICE_TASK_THROTTLE_MS 10
+
+/* RP2040 Reset. */
+#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET
+#define POINTING_DEVICE_INVERT_X
+
+/* #define POINTING_DEVICE_CS_PIN GP5 */
+/* #define POINTING_DEVICE_DEBUG 1 */
+/* /\* spi config for eeprom and pmw3360 sensor *\/ */
+/* #define SPI_SCK_PIN GP6 */
+/* #define SPI_SCK_PAL_MODE 5 */
+/* #define SPI_MOSI_PIN GP3 */
+/* #define SPI_MOSI_PAL_MODE 5 */
+/* #define SPI_MISO_PIN GP4 */
+/* #define SPI_MISO_PAL_MODE 5 */
