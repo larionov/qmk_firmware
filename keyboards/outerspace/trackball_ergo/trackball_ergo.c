@@ -218,7 +218,7 @@ void keyboard_pre_init_kb(void) {
 }
 
 void pointing_device_init_kb(void) {
-    pointing_device_set_cpi(dpi_array[keyboard_config.dpi_config]);
+    pointing_device_set_cpi(600); // dpi_array[keyboard_config.dpi_config]);
 }
 
 void eeconfig_init_kb(void) {
@@ -228,8 +228,8 @@ void eeconfig_init_kb(void) {
 }
 static void init_pins(void) {
     setPinInputHigh(GP21);
-    setPinInput(GP20);
     setPinInput(GP23);
+    setPinInput(GP20);
 }
 
 void matrix_init_kb(void) {

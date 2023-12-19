@@ -34,9 +34,11 @@
 /*     { GP0, GP1, /\* GP2, GP3, GP4, GP5, *\/ GP6, GP7, GP8, GP9, GP12, GP13, GP14, GP15, GP16, GP10, GP11, GP18, /\* GP20, GP21, *\/ GP22, /\* GP23, *\/ GP24, GP26, GP27, GP28, GP29 } */
 
 #undef DIRECT_PINS
+//                  KC_BTN1, KC_BTN3, KC_BTN2),
+
 #define DIRECT_PINS          \
     {                        \
-        { GP21, GP20, GP23 } \
+        { GP21, GP23, GP20 } \
     }
 #define SPI_DRIVER SPID0
 #define SPI_SCK_PIN GP2
@@ -51,8 +53,8 @@
 /* #define PMW33XX_CS_PIN GP21 // SPI CS pin. */
 
 /* Optional. */
-#define PMW33XX_CPI 1000      // The CPI range is 100-12000, in increments of 100. Defaults to 1600 CPI.
-#define MOUSE_EXTENDED_REPORT // Use -32767 to 32767, instead of just -127 to 127.
+// #define PMW33XX_CPI 300 // The CPI range is 100-12000, in increments of 100. Defaults to 1600 CPI.
+// #define MOUSE_EXTENDED_REPORT // Use -32767 to 32767, instead of just -127 to 127.
 // #define POINTING_DEVICE_TASK_THROTTLE_MS 10
 
 /* RP2040 Reset. */
@@ -68,3 +70,5 @@
 /* #define SPI_MOSI_PAL_MODE 5 */
 /* #define SPI_MISO_PIN GP4 */
 /* #define SPI_MISO_PAL_MODE 5 */
+/* left middle right */
+/* right left middle */
